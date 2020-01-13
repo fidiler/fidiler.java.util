@@ -1,22 +1,23 @@
 public class Main {
     public static void main(String[] args) {
-        TwoThreeTree<Integer, Integer> twoThreeTree = new TwoThreeTree<>();
-        twoThreeTree.add(18, 1);
-        twoThreeTree.add(20, 1);
-        twoThreeTree.add(10, 1);
-        twoThreeTree.add(15, 1);
-        twoThreeTree.add(6, 1);
-        twoThreeTree.add(7, 1);
-        twoThreeTree.add(8, 1);
-        twoThreeTree.add(25, 1);
-        twoThreeTree.add(40, 1);
-        twoThreeTree.add(28, 1);
-        twoThreeTree.add(66, 1);
-        twoThreeTree.add(32, 1);
-        twoThreeTree.add(51, 1);
-        twoThreeTree.add(17, 1);
-        twoThreeTree.add(23, 1);
-        twoThreeTree.add(13, 1);
-        twoThreeTree.add(24, 1);
+        TwoThreeTree<Integer, Integer> tree23 = new TwoThreeTree<>();
+        tree23.add(18, 18);
+        tree23.add(20, 20);
+        tree23.add(10, 10);
+        tree23.add(15, 15);
+        tree23.add(6, 6);
+        tree23.add(7, 7);
+        tree23.add(8, 8);
+        tree23.add(25, 25);
+        tree23.add(40, 40);
+        tree23.add(28, 28);
+        tree23.add(66, 66);
+        tree23.add(32, 32);
+        tree23.add(51, 51);
+        tree23.add(17, 17);
+        tree23.add(23, 23);
+        tree23.add(13, 13);
+        tree23.add(24, 1);
+        System.out.println(tree23.size());
     }
 }

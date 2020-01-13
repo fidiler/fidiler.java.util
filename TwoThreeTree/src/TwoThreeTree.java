@@ -48,11 +48,48 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
     }
 
     private int size;
+
     private Node<K, V> root;
 
     TwoThreeTree() {
         this.size = 0;
         this.root = null;
+    }
+
+    public V get(K key) {
+        return search(root, key);
+    }
+
+    private V search(Node<K, V> node, K key) {
+        if (node == null) {
+            return null;
+        }
+
+        if (isTwoNode(node)) {
+            if (key.compareTo(node.leftKey) < 0) {
+                return search(node.left, key);
+            } else if (key.compareTo(node.leftKey) > 0) {
+                return search(node.right, key);
+            }
+
+            return node.leftValue;
+
+        } else {
+
+            if (key.compareTo(node.leftKey) < 0) {
+                return search(node.left, key);
+            } else if (key.compareTo(node.rightKey) > 0) {
+                return search(node.right, key);
+            } else if (key.compareTo(node.leftKey) > 0 && key.compareTo(node.rightKey) < 0) {
+                return search(node.middleLeft, key);
+            }
+
+            if (node.leftKey == key) {
+                return node.leftValue;
+            }
+
+            return node.rightValue;
+        }
     }
 
     public void add(K key, V value) {
@@ -73,6 +110,7 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
 
         if (isLeaf(node)) {
             merge(node, key, value);
+            size++;
             return node;
         } else {
             // 非叶子节点2节点
@@ -167,6 +205,14 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
             }
         }
         return node;
+    }
+
+    public void remove(K key) {
+
+    }
+
+    private Node<K, V> remove(Node<K, V> node, K key) {
+        return null;
     }
 
     private Node<K, V> split42NodeLeft(Node<K, V> node4, Node<K, V> node2) {
@@ -381,5 +427,9 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
             return height;
         }
         return rightHeight(node.right, height + 1);
+    }
+
+    public int size() {
+        return size;
     }
 }
