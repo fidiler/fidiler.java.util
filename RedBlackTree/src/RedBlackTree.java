@@ -22,6 +22,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     private int size;
+
     private Node<K, V> root;
 
     RedBlackTree() {
@@ -29,11 +30,23 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         root = null;
     }
 
+    /**
+     * add 往红黑树种添加节点
+     * @param k 元素对应的键
+     * @param v 元素对应的值
+     */
     public void add(K k, V v) {
         root = add(root, k, v);
         root.color = BLACK;
     }
 
+    /**
+     * add 方法递归的往红黑树中添加节点
+     * @param node 整个红黑树的根节点
+     * @param k 用户要添加的键
+     * @param v 用户要添加的值
+     * @return 返回添加后的根节点
+     */
     private Node<K, V> add(Node<K, V> node, K k, V v) {
         if (node == null) {
             size++;
@@ -67,6 +80,11 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         return node;
     }
 
+    /**
+     * rotateLeft 对node进行左旋转
+     * @param node 当前路由到的红黑树的根节点
+     * @return 返回旋转后的根节点
+     */
     private Node<K, V> rotateLeft(Node<K, V> node) {
         Node<K, V> root = node.right;
         node.right = root.left;
@@ -76,6 +94,11 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         return root;
     }
 
+    /**
+     * rotateRight 对node进行右旋转
+     * @param node 当前路由到的红黑树的根节点
+     * @return 返回旋转后的根节点
+     */
     private Node<K, V> rotateRight(Node<K, V> node) {
         Node<K, V> root = node.left;
         node.left = root.right;
@@ -85,16 +108,30 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         return root;
     }
 
+    /**
+     * flipColor 进行颜色翻转
+     * @param node 当前路由到的红黑树的根节点
+     */
     private void flipColor(Node<K, V> node) {
         node.left.color = node.right.color = BLACK;
         node.color = RED;
     }
 
     /**
-     * isRed 判断节点是否是红节点
-     **/
+     * isRed 判断node是否是红节点
+     * @param node 当前路由到的红黑树的根节点
+     * @return 如果是红节点返回true
+     */
     private boolean isRed(Node<K, V> node) {
         return node != null && node.color == RED;
+    }
+
+    /**
+     * size 获取当前红黑树的节点个数
+     * @return 返回红黑树持有的节点个数值
+     */
+    public int size() {
+        return size;
     }
 
     public static void main(String[] args) {
