@@ -8,6 +8,21 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
         public V leftValue, middleValue, rightValue;
         public Node<K, V> left, middleLeft, middleRight, right;
 
+        private Node(K leftKey, V leftValue, K middleKey, V middleValue, K rightKey, V rightValue,
+                     Node<K, V> left, Node<K, V> middleLeft, Node<K, V> middleRight, Node<K, V> right) {
+
+            this.leftKey = leftKey;
+            this.leftValue = leftValue;
+            this.middleKey = middleKey;
+            this.middleValue = middleValue;
+            this.rightKey = rightKey;
+            this.rightValue = rightValue;
+            this.left = left;
+            this.middleLeft = middleLeft;
+            this.middleRight = middleRight;
+            this.right = right;
+        }
+
         private Node(K leftKey, V leftValue, K middleKey, V middleValue, K rightKey, V rightValue, Node<K, V> left, Node<K, V> middle, Node<K, V> right) {
             this.leftKey = leftKey;
             this.leftValue = leftValue;
@@ -18,6 +33,10 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
             this.left = left;
             this.middleLeft = middle;
             this.right = right;
+        }
+
+        Node(K leftKey, V leftValue, K middleKey, V middleValue, K rightKey, V rightValue) {
+            this(leftKey, leftValue, middleKey, middleValue, rightKey, rightValue, null, null, null);
         }
 
         /**
@@ -213,6 +232,167 @@ public class TwoThreeTree<K extends Comparable<K>, V> {
 
     private Node<K, V> remove(Node<K, V> node, K key) {
         return null;
+    }
+
+    /**
+     * removeMin 从2-3树中删除最小节点
+     */
+    public void removeMin() {
+
+    }
+
+    private Node<K, V> removeMin(Node<K, V> node) {
+        if (node == null) {
+            return null;
+        }
+
+        if (isTwoNode(node) && isTwoNode(node.left) && isTwoNode(node.right)) {
+            // 合并为一个4-node
+            node = new Node<K, V>(node.left.leftKey, node.left.leftValue,
+                    node.leftKey, node.leftValue, node.right.leftKey, node.right.leftValue,
+                    node.left.left, node.left.right, node.right.left, node.right.right);
+
+            // 向下变换
+            node.left = removeMin(node.left);
+
+        } else {
+
+            if (!isTwoNode(node.left)) {
+                node.left = removeMin(node.left);
+
+            } else {
+
+                // 父节点是2-node 右边兄弟节点不是2-node
+                if (isTwoNode(node) && isThreeNode(node.right)) {
+                    // 构造新的左节点, 新的左节点是一个3-node
+                    // 将右节点合并过来
+                    Node<K, V> left = new Node<K, V>(node.left.leftKey, node.left.leftValue, null, null, node.leftKey, node.leftValue,
+                            node.left.left, node.left.right, node.right.left);
+
+                    // 构造新的右节点, 新的右节点是一个2-node
+                    Node<K, V> right = new Node<K, V>(node.right.rightKey, node.right.rightValue, null, null, null, null,
+                            node.right.middleLeft, null, node.right.right);
+
+                    // 替换根节点为右节点中最小键
+                    node.leftKey = node.right.leftKey;
+                    node.leftValue = node.right.leftValue;
+
+                    node.left = left;
+                    node.right = right;
+
+                    // 向下变换
+                    node.left = removeMin(node.left);
+                }
+
+                // 父节点是3-node
+                if (isThreeNode(node)) {
+                    // 中间兄弟节点不是2-node
+                    if (!isTwoNode(node.middleLeft)) {
+
+
+
+                        // 右边兄弟节点不是2-node
+                    } else if (!isTwoNode(node.right)) {
+
+                        // 所有兄弟节点都是2-node
+                    } else {
+
+                    }
+                }
+
+                // 父节点是4-node
+                if (isFourNode(node)) {
+
+                }
+            }
+        }
+
+
+
+
+
+
+        // 根节点是2-node
+        if (isTwoNode(node)) {
+
+            // case1: 左右节点也是2-node
+            if (isTwoNode(node.left) && isTwoNode(node.right)) {
+                // 合并为一个4-node
+                node = new Node<K, V>(node.left.leftKey, node.left.leftValue,
+                        node.leftKey, node.leftValue, node.right.leftKey, node.right.leftValue,
+                        node.left.left, node.left.right, node.right.left, node.right.right);
+
+                // 向下变换
+                node.left = removeMin(node.left);
+
+                // case2: 左节点是2-node, 右节点不是2-node
+            } else if (isTwoNode(node.left) && !isTwoNode(node.right)) {
+
+                K rootKey = node.leftKey;
+                V rootValue = node.leftValue;
+
+                // 替换根节点为右节点中最小键
+                node.leftKey = node.right.leftKey;
+                node.leftValue = node.right.leftValue;
+
+                // 从右节点中删除这个最小键
+                node.right.leftKey = node.right.rightKey;
+                node.right.leftValue = node.right.rightValue;
+                node.right.rightKey = null;
+                node.right.rightValue = null;
+
+                // 原根节点和左子节点合并
+                node.left.rightKey = rootKey;
+                node.left.rightValue = rootValue;
+
+                // 向下变换
+                node.left = removeMin(node.left);
+
+                // case3: 左节点不是2-node
+            } else {
+
+                // 向下变换
+                node.left = removeMin(node.left);
+            }
+
+
+            // 根节点不是2-node
+        } else {
+
+
+            // 根节点是3-node
+            if (isThreeNode(node)) {
+                // case1: 左子节点是2-node, 中间节点和右节点是2-node
+                if (isTwoNode(node.left) && isTwoNode(node.middleLeft) && isTwoNode(node.right)) {
+
+                }
+
+                // case2: 左子节点是2-node, 中间是2-node节点, 右节点不是2-node
+                if (isTwoNode(node.left) && isTwoNode(node.middleLeft) && !isTwoNode(node.right)) {
+
+                }
+
+                // case3:
+
+            }
+
+
+            // case2: 左子节点是2-节点而它的兄弟节点不是2-节点
+            if (isTwoNode(node.left) && !isTwoNode(node.right)) {
+
+            }
+
+        }
+
+
+        if (!isTwoNode(node.left)) {
+
+        }
+
+        if (node.left != null) {
+            node.left = removeMin(node.left);
+
+        }
     }
 
     private Node<K, V> split42NodeLeft(Node<K, V> node4, Node<K, V> node2) {
